@@ -42,9 +42,9 @@ export default function HeroSection() {
     <section
       className="min-h-screen flex items-center justify-center relative overflow-hidden cyber-grid scanline"
     >
-      {/* Animated Background Particles */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        {[...Array(40)].map((_, i) => (
+      {/* Animated Background Particles - Reduced for mobile performance */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none hidden md:block">
+        {[...Array(15)].map((_, i) => (
           <motion.div
             key={i}
             className="absolute rounded-full"
@@ -57,23 +57,21 @@ export default function HeroSection() {
               filter: 'blur(1px)',
             }}
             animate={{
-              y: [0, -50, 0],
-              x: [0, Math.random() * 30 - 15, 0],
-              opacity: [0.1, 0.6, 0.1],
-              scale: [1, 1.5, 1],
+              y: [0, -30, 0],
+              opacity: [0.1, 0.4, 0.1],
             }}
             transition={{
-              duration: 4 + Math.random() * 3,
+              duration: 5 + Math.random() * 3,
               repeat: Infinity,
-              delay: Math.random() * 3,
+              delay: Math.random() * 2,
               ease: "easeInOut",
             }}
           />
         ))}
       </div>
 
-      {/* 3D Floating Geometric Shapes */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+      {/* 3D Floating Geometric Shapes - Hidden on mobile for performance */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none hidden md:block">
         {/* Large rotating cube outline */}
         <motion.div
           className="absolute top-20 right-20 w-32 h-32 border border-[var(--cyber-primary)]/20"
@@ -95,10 +93,9 @@ export default function HeroSection() {
           animate={{
             y: [0, -30, 0],
             rotate: [45, 90, 45],
-            scale: [1, 1.1, 1],
           }}
           transition={{
-            duration: 5,
+            duration: 6,
             repeat: Infinity,
             ease: "easeInOut",
           }}
@@ -108,11 +105,11 @@ export default function HeroSection() {
         <motion.div
           className="absolute top-1/3 left-10 w-24 h-24 rounded-full border border-[var(--cyber-accent)]/20"
           animate={{
-            scale: [1, 1.3, 1],
-            opacity: [0.2, 0.5, 0.2],
+            scale: [1, 1.2, 1],
+            opacity: [0.2, 0.4, 0.2],
           }}
           transition={{
-            duration: 3,
+            duration: 4,
             repeat: Infinity,
             ease: "easeInOut",
           }}
@@ -123,10 +120,9 @@ export default function HeroSection() {
           className="absolute bottom-20 right-32"
           animate={{
             rotate: [0, 360],
-            y: [0, -20, 0],
           }}
           transition={{
-            duration: 15,
+            duration: 20,
             repeat: Infinity,
             ease: "linear",
           }}
@@ -144,7 +140,7 @@ export default function HeroSection() {
             rotateX: [0, 360],
           }}
           transition={{
-            duration: 10,
+            duration: 15,
             repeat: Infinity,
             ease: "linear",
           }}
@@ -288,17 +284,16 @@ export default function HeroSection() {
             initial={{ opacity: 0, x: 50 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, delay: 0.4 }}
-            className="order-1 lg:order-2 flex justify-center perspective-1000"
+            className="order-1 lg:order-2 flex justify-center perspective-1000 pt-16 md:pt-0"
           >
             <div className="relative">
-              {/* Main Profile Card with 3D Effect */}
+              {/* Main Profile Card with 3D Effect - Simplified on mobile */}
               <motion.div
                 animate={{
-                  y: [0, -15, 0],
-                  rotateY: [-5, 5, -5],
+                  y: [0, -10, 0],
                 }}
                 transition={{
-                  duration: 6,
+                  duration: 4,
                   repeat: Infinity,
                   ease: "easeInOut"
                 }}

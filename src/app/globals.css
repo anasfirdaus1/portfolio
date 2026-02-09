@@ -105,7 +105,7 @@ body {
   animation: glitch 0.1s infinite;
 }
 
-/* Scan Line */
+/* Scan Line - Hidden on mobile for performance */
 @keyframes scanline {
   0% {
     transform: translateY(-100%);
@@ -125,9 +125,16 @@ body {
   height: 4px;
   background: linear-gradient(90deg, transparent, var(--cyber-primary), transparent);
   opacity: 0.1;
-  animation: scanline 4s linear infinite;
+  animation: scanline 6s linear infinite;
   pointer-events: none;
   z-index: 1000;
+}
+
+/* Disable scanline on mobile for better performance */
+@media (max-width: 768px) {
+  .scanline::after {
+    display: none;
+  }
 }
 
 /* Neon Text */
