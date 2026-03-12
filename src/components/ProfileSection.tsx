@@ -141,9 +141,9 @@ export default function ProfileSection() {
 
                                         <div className="mt-4 text-center">
                                             <h3 className="text-lg font-bold text-white" style={{ fontFamily: 'Orbitron, sans-serif' }}>
-                                                Anas Firdaus
+                                                {siteConfig.profile.name}
                                             </h3>
-                                            <p className="text-sm text-[var(--cyber-primary)] font-mono">@anasfirdaus</p>
+                                            <p className="text-sm text-[var(--cyber-primary)] font-mono">{siteConfig.profile.username}</p>
                                         </div>
                                     </div>
 
@@ -184,9 +184,7 @@ export default function ProfileSection() {
                             {'>'} ABOUT_ME
                         </h3>
                         <p className="text-gray-300 leading-relaxed">
-                            Passionate fullstack developer with expertise in modern web technologies.
-                            I love building scalable applications and exploring new technologies to solve complex problems.
-                            Always eager to learn and take on new challenges.
+                            {siteConfig.profile.bio}
                         </p>
                     </div>
 

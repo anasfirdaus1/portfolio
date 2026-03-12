@@ -1,6 +1,14 @@
 'use client';
 
 import { motion } from 'framer-motion';
+import { siteConfig } from '@/data/siteConfig';
+
+const socialLinks = [
+    { name: 'GitHub', href: `https://${siteConfig.profile.github}` },
+    { name: 'LinkedIn', href: `https://${siteConfig.profile.linkedin}` },
+    { name: 'Email', href: `mailto:${siteConfig.profile.email}` },
+    { name: 'WhatsApp', href: `https://wa.me/62${siteConfig.profile.whatsapp.replace(/^0/, '')}` },
+];
 
 export default function Footer() {
     const currentYear = new Date().getFullYear();
@@ -31,13 +39,15 @@ export default function Footer() {
                         transition={{ duration: 0.5, delay: 0.2 }}
                         className="flex gap-6"
                     >
-                        {['GitHub', 'LinkedIn', 'Twitter', 'Email'].map((social) => (
+                        {socialLinks.map((social) => (
                             <a
-                                key={social}
-                                href="#"
+                                key={social.name}
+                                href={social.href}
+                                target="_blank"
+                                rel="noopener noreferrer"
                                 className="text-gray-400 hover:text-[var(--cyber-primary)] transition-colors font-mono text-sm"
                             >
-                                {social}
+                                {social.name}
                             </a>
                         ))}
                     </motion.div>
@@ -54,7 +64,7 @@ export default function Footer() {
                     className="text-center"
                 >
                     <p className="text-gray-500 text-sm font-mono">
-                        {'// '}&copy; {currentYear} Anas Firdaus. All rights reserved.
+                        {'// '}&copy; {currentYear} {siteConfig.profile.name}. All rights reserved.
                     </p>
                     <p className="text-gray-600 text-xs font-mono mt-2">
                         {'< Built with ❤️ and lots of ☕ />'}

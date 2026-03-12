@@ -2,6 +2,7 @@
 
 import HeroSection from '@/components/HeroSection';
 import ProfileSection from '@/components/ProfileSection';
+import LibrarySection from '@/components/LibrarySection';
 import ServicesSection from '@/components/ServicesSection';
 import Footer from '@/components/Footer';
 import CursorLight from '@/components/CursorLight';
@@ -17,6 +18,9 @@ export default function Home() {
 
       {/* Profile Section - Bio, ID Card */}
       <ProfileSection />
+
+      {/* Library Section - Projects Marquee */}
+      <LibrarySection />
 
       {/* Services Section */}
       <ServicesSection />

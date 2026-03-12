@@ -1,118 +1,27 @@
 'use client';
 
-import { useRef } from 'react';
-import { motion, useInView } from 'framer-motion';
-
-// Dummy project data
-const projectsRow1 = [
-    {
-        id: 1,
-        title: 'TaniLink',
-        description: 'Agricultural marketplace platform',
-        tech: ['React', 'Node.js', 'PostgreSQL'],
-        color: '#00ff88',
-    },
-    {
-        id: 2,
-        title: 'E-Commerce Pro',
-        description: 'Modern e-commerce solution',
-        tech: ['Next.js', 'Tailwind', 'Stripe'],
-        color: '#00d4ff',
-    },
-    {
-        id: 3,
-        title: 'Task Manager',
-        description: 'Productivity application',
-        tech: ['React', 'Firebase', 'Material UI'],
-        color: '#ff00ff',
-    },
-    {
-        id: 4,
-        title: 'Weather App',
-        description: 'Real-time weather dashboard',
-        tech: ['Vue.js', 'OpenWeather API'],
-        color: '#ffcc00',
-    },
-    {
-        id: 5,
-        title: 'Portfolio v2',
-        description: 'Personal portfolio website',
-        tech: ['Next.js', 'Three.js', 'Framer'],
-        color: '#00ff88',
-    },
-    {
-        id: 6,
-        title: 'Chat Application',
-        description: 'Real-time messaging app',
-        tech: ['Socket.io', 'React', 'MongoDB'],
-        color: '#00d4ff',
-    },
-];
-
-const projectsRow2 = [
-    {
-        id: 7,
-        title: 'Blog Platform',
-        description: 'Content management system',
-        tech: ['PHP', 'Laravel', 'MySQL'],
-        color: '#ff00ff',
-    },
-    {
-        id: 8,
-        title: 'Inventory System',
-        description: 'Stock management tool',
-        tech: ['Python', 'Django', 'PostgreSQL'],
-        color: '#ffcc00',
-    },
-    {
-        id: 9,
-        title: 'Music Player',
-        description: 'Web-based audio player',
-        tech: ['JavaScript', 'Web Audio API'],
-        color: '#00ff88',
-    },
-    {
-        id: 10,
-        title: 'Recipe Finder',
-        description: 'Food recipe application',
-        tech: ['React', 'Spoonacular API'],
-        color: '#00d4ff',
-    },
-    {
-        id: 11,
-        title: 'Fitness Tracker',
-        description: 'Health monitoring app',
-        tech: ['React Native', 'Firebase'],
-        color: '#ff00ff',
-    },
-    {
-        id: 12,
-        title: 'Budget Planner',
-        description: 'Personal finance manager',
-        tech: ['Vue.js', 'Chart.js', 'Supabase'],
-        color: '#ffcc00',
-    },
-];
+import { useRef, useState, useEffect } from 'react';
+import { motion, useInView, AnimatePresence } from 'framer-motion';
+import { siteConfig, Project } from '@/data/siteConfig';
 
 interface ProjectCardProps {
-    project: {
-        id: number;
-        title: string;
-        description: string;
-        tech: string[];
-        color: string;
-    };
+    project: Project;
+    onSelect: (project: Project) => void;
+    isPaused: boolean;
 }
 
-function ProjectCard({ project }: ProjectCardProps) {
+function ProjectCard({ project, onSelect, isPaused }: ProjectCardProps) {
     return (
-        <div
-            className="flex-shrink-0 w-72 md:w-80 p-6 rounded-xl cyber-card mx-4 group"
+        <motion.div
+            whileHover={{ scale: 1.03, y: -5 }}
+            whileTap={{ scale: 0.98 }}
+            onClick={() => onSelect(project)}
+            className="flex-shrink-0 w-72 md:w-80 p-6 rounded-xl cyber-card mx-4 group cursor-pointer"
             style={{
                 borderColor: `${project.color}40`,
             }}
         >
-            {/* Project Thumbnail Placeholder */}
+            {/* Project Thumbnail */}
             <div
                 className="w-full h-40 rounded-lg mb-4 flex items-center justify-center relative overflow-hidden"
                 style={{
@@ -120,29 +29,19 @@ function ProjectCard({ project }: ProjectCardProps) {
                     border: `1px solid ${project.color}30`,
                 }}
             >
-                {/* Placeholder Icon */}
-                <svg
-                    className="w-16 h-16 transition-transform group-hover:scale-110"
-                    style={{ color: project.color }}
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                >
-                    <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={1}
-                        d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"
-                    />
-                </svg>
+                <img
+                    src={project.image}
+                    alt={project.title}
+                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                />
 
                 {/* Hover Overlay */}
                 <div
-                    className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center"
-                    style={{ background: `${project.color}20` }}
+                    className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center backdrop-blur-sm"
+                    style={{ background: `${project.color}30` }}
                 >
-                    <span className="text-sm font-mono" style={{ color: project.color }}>
-                        VIEW PROJECT
+                    <span className="text-sm font-mono font-bold text-white px-4 py-2 rounded-lg" style={{ background: `${project.color}90` }}>
+                        VIEW DETAIL
                     </span>
                 </div>
             </div>
@@ -172,17 +71,236 @@ function ProjectCard({ project }: ProjectCardProps) {
                     </span>
                 ))}
             </div>
-        </div>
+        </motion.div>
+    );
+}
+
+// Project Detail Modal
+function ProjectDetailModal({ project, onClose }: { project: Project; onClose: () => void }) {
+    // Close on Escape key
+    useEffect(() => {
+        const handleKeyDown = (e: KeyboardEvent) => {
+            if (e.key === 'Escape') onClose();
+        };
+        window.addEventListener('keydown', handleKeyDown);
+        document.body.style.overflow = 'hidden';
+        return () => {
+            window.removeEventListener('keydown', handleKeyDown);
+            document.body.style.overflow = '';
+        };
+    }, [onClose]);
+
+    return (
+        <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+            className="fixed inset-0 z-[100] flex items-center justify-center p-4 md:p-8"
+            onClick={onClose}
+        >
+            {/* Backdrop */}
+            <div className="absolute inset-0 bg-black/80 backdrop-blur-md" />
+
+            {/* Modal Content */}
+            <motion.div
+                initial={{ scale: 0.8, opacity: 0, y: 50 }}
+                animate={{ scale: 1, opacity: 1, y: 0 }}
+                exit={{ scale: 0.8, opacity: 0, y: 50 }}
+                transition={{ type: 'spring', damping: 25, stiffness: 300 }}
+                onClick={(e) => e.stopPropagation()}
+                className="relative w-full max-w-3xl max-h-[90vh] overflow-y-auto rounded-2xl"
+                style={{
+                    background: 'linear-gradient(135deg, #0f0f1a 0%, #1a1a2e 100%)',
+                    border: `2px solid ${project.color}60`,
+                    boxShadow: `0 0 60px ${project.color}20, 0 25px 80px rgba(0,0,0,0.5)`,
+                }}
+            >
+                {/* Close Button */}
+                <button
+                    onClick={onClose}
+                    className="absolute top-4 right-4 z-10 w-10 h-10 rounded-full flex items-center justify-center transition-all hover:scale-110"
+                    style={{
+                        background: `${project.color}20`,
+                        border: `1px solid ${project.color}50`,
+                    }}
+                >
+                    <svg className="w-5 h-5" style={{ color: project.color }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+
+                {/* Header with Image */}
+                <div className="relative w-full h-48 md:h-64 overflow-hidden rounded-t-2xl">
+                    <img
+                        src={project.image}
+                        alt={project.title}
+                        className="w-full h-full object-cover"
+                    />
+                    <div
+                        className="absolute inset-0"
+                        style={{
+                            background: `linear-gradient(to top, #0f0f1a 0%, transparent 60%)`,
+                        }}
+                    />
+                    {/* Animated shimmer */}
+                    <motion.div
+                        className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent"
+                        animate={{ x: ['-200%', '200%'] }}
+                        transition={{ duration: 3, repeat: Infinity, repeatDelay: 3 }}
+                    />
+                </div>
+
+                {/* Content */}
+                <div className="p-6 md:p-8 -mt-8 relative">
+                    {/* Title */}
+                    <motion.h2
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.1 }}
+                        className="text-2xl md:text-3xl font-bold mb-2"
+                        style={{ color: project.color, fontFamily: 'Orbitron, sans-serif' }}
+                    >
+                        {project.title}
+                    </motion.h2>
+
+                    {/* Short Description */}
+                    <motion.p
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.15 }}
+                        className="text-gray-400 text-sm font-mono mb-4"
+                    >
+                        {project.description}
+                    </motion.p>
+
+                    {/* Divider */}
+                    <div className="h-px w-full mb-6" style={{ background: `linear-gradient(to right, ${project.color}50, transparent)` }} />
+
+                    {/* Detail Description */}
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.2 }}
+                        className="mb-6"
+                    >
+                        <h3 className="text-sm font-mono mb-3" style={{ color: project.color }}>
+                            {'>'} DESKRIPSI
+                        </h3>
+                        <p className="text-gray-300 leading-relaxed text-sm md:text-base">
+                            {project.detailDescription}
+                        </p>
+                    </motion.div>
+
+                    {/* Tech Stack */}
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.25 }}
+                        className="mb-8"
+                    >
+                        <h3 className="text-sm font-mono mb-3" style={{ color: project.color }}>
+                            {'>'} TECH_STACK
+                        </h3>
+                        <div className="flex flex-wrap gap-2">
+                            {project.tech.map((tech, i) => (
+                                <motion.span
+                                    key={tech}
+                                    initial={{ opacity: 0, scale: 0 }}
+                                    animate={{ opacity: 1, scale: 1 }}
+                                    transition={{ delay: 0.3 + i * 0.05 }}
+                                    className="text-xs px-3 py-1.5 rounded-lg font-mono"
+                                    style={{
+                                        background: `${project.color}15`,
+                                        color: project.color,
+                                        border: `1px solid ${project.color}30`,
+                                    }}
+                                >
+                                    {tech}
+                                </motion.span>
+                            ))}
+                        </div>
+                    </motion.div>
+
+                    {/* Action Buttons */}
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.35 }}
+                        className="flex flex-wrap gap-4"
+                    >
+                        {project.url ? (
+                            <a
+                                href={project.url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="inline-flex items-center gap-2 px-6 py-3 rounded-lg font-mono text-sm font-bold text-black transition-all hover:opacity-90 hover:scale-105"
+                                style={{
+                                    background: `linear-gradient(135deg, ${project.color}, ${project.color}cc)`,
+                                    boxShadow: `0 4px 20px ${project.color}40`,
+                                }}
+                            >
+                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                                </svg>
+                                LIHAT WEBSITE
+                            </a>
+                        ) : (
+                            <span
+                                className="inline-flex items-center gap-2 px-6 py-3 rounded-lg font-mono text-sm font-bold transition-all cursor-not-allowed opacity-60"
+                                style={{
+                                    background: `${project.color}20`,
+                                    color: project.color,
+                                    border: `1px solid ${project.color}40`,
+                                }}
+                            >
+                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m0 0v2m0-2h2m-2 0H10m9.374-9.373a9 9 0 11-12.728 0" />
+                                </svg>
+                                COMING SOON
+                            </span>
+                        )}
+
+                        <button
+                            onClick={onClose}
+                            className="inline-flex items-center gap-2 px-6 py-3 rounded-lg font-mono text-sm border transition-all hover:scale-105"
+                            style={{
+                                borderColor: `${project.color}40`,
+                                color: project.color,
+                            }}
+                        >
+                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                            </svg>
+                            KEMBALI
+                        </button>
+                    </motion.div>
+                </div>
+
+                {/* Corner Decorations */}
+                <div className="absolute top-0 left-0 w-6 h-6 border-t-2 border-l-2 rounded-tl-2xl" style={{ borderColor: project.color }} />
+                <div className="absolute top-0 right-0 w-6 h-6 border-t-2 border-r-2 rounded-tr-2xl" style={{ borderColor: project.color }} />
+                <div className="absolute bottom-0 left-0 w-6 h-6 border-b-2 border-l-2 rounded-bl-2xl" style={{ borderColor: project.color }} />
+                <div className="absolute bottom-0 right-0 w-6 h-6 border-b-2 border-r-2 rounded-br-2xl" style={{ borderColor: project.color }} />
+            </motion.div>
+        </motion.div>
     );
 }
 
 export default function LibrarySection() {
     const ref = useRef(null);
     const isInView = useInView(ref, { once: true, margin: '-100px' });
+    const [selectedProject, setSelectedProject] = useState<Project | null>(null);
+    const isPaused = selectedProject !== null;
 
-    // Duplicate projects for infinite scroll effect
-    const duplicatedRow1 = [...projectsRow1, ...projectsRow1];
-    const duplicatedRow2 = [...projectsRow2, ...projectsRow2];
+    // Split projects into two rows for marquee
+    const half = Math.ceil(siteConfig.projects.length / 2);
+    const row1 = siteConfig.projects.slice(0, half);
+    const row2 = siteConfig.projects.slice(half);
+
+    // Duplicate for infinite scroll
+    const duplicatedRow1 = [...row1, ...row1, ...row1];
+    const duplicatedRow2 = [...row2, ...row2, ...row2];
 
     return (
         <section
@@ -204,7 +322,7 @@ export default function LibrarySection() {
                     {'{'} LIBRARY {'}'}
                 </h2>
                 <p className="text-gray-400 font-mono text-sm">
-                    {'// A collection of my recent projects'}
+                    {'// Klik project untuk melihat detail'}
                 </p>
             </motion.div>
 
@@ -215,9 +333,19 @@ export default function LibrarySection() {
                 transition={{ duration: 0.6, delay: 0.2 }}
                 className="mb-8"
             >
-                <div className="flex marquee-right hover:[animation-play-state:paused]">
+                <div
+                    className="flex hover:[animation-play-state:paused]"
+                    style={{
+                        animation: isPaused ? 'none' : 'marquee-right 30s linear infinite',
+                    }}
+                >
                     {duplicatedRow1.map((project, index) => (
-                        <ProjectCard key={`row1-${project.id}-${index}`} project={project} />
+                        <ProjectCard
+                            key={`row1-${project.id}-${index}`}
+                            project={project}
+                            onSelect={setSelectedProject}
+                            isPaused={isPaused}
+                        />
                     ))}
                 </div>
             </motion.div>
@@ -228,24 +356,32 @@ export default function LibrarySection() {
                 animate={isInView ? { opacity: 1, x: 0 } : {}}
                 transition={{ duration: 0.6, delay: 0.4 }}
             >
-                <div className="flex marquee-left hover:[animation-play-state:paused]">
+                <div
+                    className="flex hover:[animation-play-state:paused]"
+                    style={{
+                        animation: isPaused ? 'none' : 'marquee-left 30s linear infinite',
+                    }}
+                >
                     {duplicatedRow2.map((project, index) => (
-                        <ProjectCard key={`row2-${project.id}-${index}`} project={project} />
+                        <ProjectCard
+                            key={`row2-${project.id}-${index}`}
+                            project={project}
+                            onSelect={setSelectedProject}
+                            isPaused={isPaused}
+                        />
                     ))}
                 </div>
             </motion.div>
 
-            {/* View All Button */}
-            <motion.div
-                initial={{ opacity: 0, y: 50 }}
-                animate={isInView ? { opacity: 1, y: 0 } : {}}
-                transition={{ duration: 0.6, delay: 0.6 }}
-                className="text-center mt-16"
-            >
-                <button className="px-8 py-3 border-2 border-[var(--cyber-primary)] text-[var(--cyber-primary)] rounded-lg font-mono text-sm hover:bg-[var(--cyber-primary)] hover:text-black transition-all duration-300 pulse-glow">
-                    VIEW_ALL_PROJECTS( )
-                </button>
-            </motion.div>
+            {/* Project Detail Modal */}
+            <AnimatePresence>
+                {selectedProject && (
+                    <ProjectDetailModal
+                        project={selectedProject}
+                        onClose={() => setSelectedProject(null)}
+                    />
+                )}
+            </AnimatePresence>
 
             {/* Decorative Lines */}
             <div className="absolute left-0 top-1/4 w-32 h-px bg-gradient-to-r from-transparent via-[var(--cyber-primary)] to-transparent opacity-30" />

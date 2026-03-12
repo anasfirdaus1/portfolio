@@ -11,9 +11,11 @@ export interface Project {
     id: number;
     title: string;
     description: string;
+    detailDescription: string;
     tech: string[];
     color: string;
-    image?: string;
+    image: string;
+    url?: string; // [!] Add live URL when available
 }
 
 export interface ProfileData {
@@ -35,10 +37,9 @@ export interface ProfileData {
 
 export interface SiteConfig {
     profile: ProfileData;
-    heroPhoto: string; // Add this line
+    heroPhoto: string;
     skills: Skill[];
-    projectsRow1: Project[];
-    projectsRow2: Project[];
+    projects: Project[];
 }
 
 // ===========================================
@@ -58,8 +59,8 @@ export const siteConfig: SiteConfig = {
         linkedin: 'linkedin.com/in/anasfirdaus',
         whatsapp: '087810851738',
         photo: 'https://i.imgur.com/4gbM4ra.jpeg', // [!] PASTE YOUR ID CARD PHOTO URL HERE
-        experience: '3 Bulan',
-        projectCount: '5',
+        experience: '9 Bulan',
+        projectCount: '10+',
         clientCount: '5',
     },
 
@@ -74,93 +75,67 @@ export const siteConfig: SiteConfig = {
         { name: 'JavaScript', icon: '⚡', color: '#f7df1e' },
     ],
 
-    projectsRow1: [
+    projects: [
         {
             id: 1,
             title: 'TaniLink',
-            description: 'Agricultural marketplace platform',
-            tech: ['React', 'Node.js', 'PostgreSQL'],
+            description: 'Platform marketplace pertanian',
+            detailDescription: 'TaniLink adalah platform marketplace digital yang menghubungkan petani langsung dengan pembeli. Dilengkapi fitur manajemen produk, sistem pembayaran terintegrasi, dan dashboard analitik untuk membantu petani memaksimalkan hasil penjualan.',
+            tech: ['Next.js', 'TypeScript', 'PostgreSQL', 'Tailwind CSS'],
             color: '#00d4ff',
+            image: 'https://images.unsplash.com/photo-1625246333195-78d9c38ad449?w=800&q=80',
+            // url: 'https://tanilink.vercel.app', // [!] Add live URL when available
         },
         {
             id: 2,
-            title: 'E-Commerce Pro',
-            description: 'Modern e-commerce solution',
-            tech: ['Next.js', 'Tailwind', 'Stripe'],
+            title: 'Web Hukum',
+            description: 'Website jasa layanan hukum',
+            detailDescription: 'Website profesional untuk firma jasa hukum yang menyediakan informasi layanan konsultasi hukum, profil advokat, artikel hukum, dan sistem booking konsultasi online. Didesain dengan tampilan elegan dan terpercaya.',
+            tech: ['Next.js', 'TypeScript', 'Tailwind CSS', 'Prisma'],
             color: '#a855f7',
+            image: 'https://images.unsplash.com/photo-1589829545856-d10d557cf95f?w=800&q=80',
+            // url: 'https://webhukum.vercel.app', // [!] Add live URL when available
         },
         {
             id: 3,
-            title: 'Task Manager',
-            description: 'Productivity application',
-            tech: ['React', 'Firebase', 'Material UI'],
-            color: '#c084fc',
+            title: 'Tour & Travel',
+            description: 'Platform wisata dan perjalanan',
+            detailDescription: 'Platform tour & travel yang menampilkan paket wisata menarik, galeri destinasi, sistem pemesanan online, dan informasi lengkap perjalanan. Dilengkapi dengan UI/UX modern dan responsif untuk pengalaman booking yang mudah.',
+            tech: ['Next.js', 'React', 'Tailwind CSS', 'Supabase'],
+            color: '#00ff88',
+            image: 'https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=800&q=80',
+            // url: 'https://tour-travel.vercel.app', // [!] Add live URL when available
         },
         {
             id: 4,
-            title: 'Weather App',
-            description: 'Real-time weather dashboard',
-            tech: ['Vue.js', 'OpenWeather API'],
-            color: '#60a5fa',
+            title: 'Travel Umroh',
+            description: 'Website travel umroh & haji',
+            detailDescription: 'Website travel umroh premium yang menampilkan paket perjalanan umroh dan haji, jadwal keberangkatan, galeri momen jamaah, dan sistem pendaftaran online. Dibangun dengan desain yang elegan dan bernuansa islami.',
+            tech: ['Next.js', 'TypeScript', 'Tailwind CSS', 'Firebase'],
+            color: '#ffcc00',
+            image: 'https://images.unsplash.com/photo-1591604129939-f1efa4d9f7fa?w=800&q=80',
+            // url: 'https://travel-umroh.vercel.app', // [!] Add live URL when available
         },
         {
             id: 5,
-            title: 'Portfolio v2',
-            description: 'Personal portfolio website',
-            tech: ['Next.js', 'Three.js', 'Framer'],
-            color: '#00d4ff',
+            title: 'UMKM Jajanan',
+            description: 'Website UMKM jajanan pinggir jalan',
+            detailDescription: 'Website katalog digital untuk UMKM jajanan pinggir jalan yang menampilkan menu lengkap, harga, lokasi penjualan, dan sistem pemesanan online. Membantu pelaku UMKM go-digital dengan tampilan menarik dan mudah dikelola.',
+            tech: ['Next.js', 'React', 'Tailwind CSS', 'MongoDB'],
+            color: '#ff6b6b',
+            image: 'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=800&q=80',
+            // url: 'https://umkm-jajanan.vercel.app', // [!] Add live URL when available
         },
         {
             id: 6,
-            title: 'Chat Application',
-            description: 'Real-time messaging app',
-            tech: ['Socket.io', 'React', 'MongoDB'],
-            color: '#a855f7',
-        },
-    ],
-
-    projectsRow2: [
-        {
-            id: 7,
-            title: 'Blog Platform',
-            description: 'Content management system',
-            tech: ['PHP', 'Laravel', 'MySQL'],
-            color: '#c084fc',
-        },
-        {
-            id: 8,
-            title: 'Inventory System',
-            description: 'Stock management tool',
-            tech: ['Python', 'Django', 'PostgreSQL'],
-            color: '#60a5fa',
-        },
-        {
-            id: 9,
-            title: 'Music Player',
-            description: 'Web-based audio player',
-            tech: ['JavaScript', 'Web Audio API'],
-            color: '#00d4ff',
-        },
-        {
-            id: 10,
-            title: 'Recipe Finder',
-            description: 'Food recipe application',
-            tech: ['React', 'Spoonacular API'],
-            color: '#a855f7',
-        },
-        {
-            id: 11,
-            title: 'Fitness Tracker',
-            description: 'Health monitoring app',
-            tech: ['React Native', 'Firebase'],
-            color: '#c084fc',
-        },
-        {
-            id: 12,
-            title: 'Budget Planner',
-            description: 'Personal finance manager',
-            tech: ['Vue.js', 'Chart.js', 'Supabase'],
-            color: '#60a5fa',
+            title: 'Yayasan',
+            description: 'Website yayasan & lembaga sosial',
+            detailDescription: 'Website resmi yayasan yang menampilkan profil organisasi, program-program sosial, laporan keuangan transparan, galeri kegiatan, dan sistem donasi online. Dibangun untuk meningkatkan kepercayaan donatur dan memperluas jangkauan sosial.',
+            tech: ['Next.js', 'TypeScript', 'Prisma', 'Tailwind CSS'],
+            color: '#4ecdc4',
+            image: 'https://images.unsplash.com/photo-1559027615-cd4628902d4a?w=800&q=80',
+            // url: 'https://yayasan.vercel.app', // [!] Add live URL when available
         },
     ],
 };
+

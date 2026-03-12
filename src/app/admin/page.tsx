@@ -8,8 +8,7 @@ export default function AdminPage() {
     const [activeTab, setActiveTab] = useState<'profile' | 'images' | 'skills' | 'projects'>('profile');
     const [profile, setProfile] = useState(siteConfig.profile);
     const [skills, setSkills] = useState(siteConfig.skills);
-    const [projectsRow1, setProjectsRow1] = useState(siteConfig.projectsRow1);
-    const [projectsRow2, setProjectsRow2] = useState(siteConfig.projectsRow2);
+    const [projects, setProjects] = useState(siteConfig.projects);
     const [showCode, setShowCode] = useState(false);
 
     // Image states
@@ -25,9 +24,7 @@ export const siteConfig = {
 
   skills: ${JSON.stringify(skills, null, 4)},
 
-  projectsRow1: ${JSON.stringify(projectsRow1, null, 4)},
-
-  projectsRow2: ${JSON.stringify(projectsRow2, null, 4)},
+  projects: ${JSON.stringify(projects, null, 4)},
   
   // Hero Section Photo (use in HeroSection component)
   heroPhoto: "${heroPhoto}",
@@ -411,19 +408,20 @@ export const siteConfig = {
                     {/* Projects Tab */}
                     {activeTab === 'projects' && (
                         <div className="space-y-6">
-                            {/* Row 1 */}
                             <div>
                                 <div className="flex items-center justify-between mb-4">
                                     <h2 className="text-xl font-bold text-[var(--cyber-primary)] font-mono">
-                                        {'>'} Projects Row 1 (→ Right)
+                                        {'>'} Projects
                                     </h2>
                                     <button
-                                        onClick={() => setProjectsRow1([...projectsRow1, {
+                                        onClick={() => setProjects([...projects, {
                                             id: Date.now(),
                                             title: 'New Project',
                                             description: 'Project description',
+                                            detailDescription: 'Detailed description here',
                                             tech: ['React'],
-                                            color: '#00d4ff'
+                                            color: '#00d4ff',
+                                            image: '',
                                         }])}
                                         className="px-4 py-2 bg-[var(--cyber-primary)] text-black rounded-lg font-mono text-sm hover:opacity-90 transition-opacity"
                                     >
@@ -432,12 +430,12 @@ export const siteConfig = {
                                 </div>
 
                                 <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-                                    {projectsRow1.map((project, index) => (
+                                    {projects.map((project, index) => (
                                         <div key={project.id} className="bg-[var(--cyber-dark)] rounded-lg p-4 border border-gray-700">
                                             <div className="flex items-center justify-between mb-3">
                                                 <div className="w-4 h-4 rounded" style={{ background: project.color }}></div>
                                                 <button
-                                                    onClick={() => setProjectsRow1(projectsRow1.filter((_, i) => i !== index))}
+                                                    onClick={() => setProjects(projects.filter((_, i) => i !== index))}
                                                     className="text-red-400 hover:text-red-300 text-sm"
                                                 >
                                                     ✕ Remove
@@ -447,9 +445,9 @@ export const siteConfig = {
                                                 type="text"
                                                 value={project.title}
                                                 onChange={(e) => {
-                                                    const newProjects = [...projectsRow1];
-                                                    newProjects[index].title = e.target.value;
-                                                    setProjectsRow1(newProjects);
+                                                    const newProjects = [...projects];
+                                                    newProjects[index] = { ...newProjects[index], title: e.target.value };
+                                                    setProjects(newProjects);
                                                 }}
                                                 placeholder="Project title"
                                                 className="w-full bg-[var(--cyber-darker)] border border-gray-700 rounded px-3 py-2 text-white text-sm mb-2 focus:border-[var(--cyber-primary)] focus:outline-none"
@@ -458,22 +456,33 @@ export const siteConfig = {
                                                 type="text"
                                                 value={project.description}
                                                 onChange={(e) => {
-                                                    const newProjects = [...projectsRow1];
-                                                    newProjects[index].description = e.target.value;
-                                                    setProjectsRow1(newProjects);
+                                                    const newProjects = [...projects];
+                                                    newProjects[index] = { ...newProjects[index], description: e.target.value };
+                                                    setProjects(newProjects);
                                                 }}
-                                                placeholder="Description"
+                                                placeholder="Short description"
                                                 className="w-full bg-[var(--cyber-darker)] border border-gray-700 rounded px-3 py-2 text-white text-sm mb-2 focus:border-[var(--cyber-primary)] focus:outline-none"
                                             />
                                             <input
                                                 type="text"
                                                 value={project.tech.join(', ')}
                                                 onChange={(e) => {
-                                                    const newProjects = [...projectsRow1];
-                                                    newProjects[index].tech = e.target.value.split(',').map(t => t.trim());
-                                                    setProjectsRow1(newProjects);
+                                                    const newProjects = [...projects];
+                                                    newProjects[index] = { ...newProjects[index], tech: e.target.value.split(',').map(t => t.trim()) };
+                                                    setProjects(newProjects);
                                                 }}
                                                 placeholder="Tech (comma separated)"
+                                                className="w-full bg-[var(--cyber-darker)] border border-gray-700 rounded px-3 py-2 text-white text-sm mb-2 focus:border-[var(--cyber-primary)] focus:outline-none"
+                                            />
+                                            <input
+                                                type="text"
+                                                value={project.url || ''}
+                                                onChange={(e) => {
+                                                    const newProjects = [...projects];
+                                                    newProjects[index] = { ...newProjects[index], url: e.target.value || undefined };
+                                                    setProjects(newProjects);
+                                                }}
+                                                placeholder="Website URL (optional)"
                                                 className="w-full bg-[var(--cyber-darker)] border border-gray-700 rounded px-3 py-2 text-white text-sm mb-2 focus:border-[var(--cyber-primary)] focus:outline-none"
                                             />
                                             <div className="flex items-center gap-2">
@@ -481,9 +490,9 @@ export const siteConfig = {
                                                     type="color"
                                                     value={project.color}
                                                     onChange={(e) => {
-                                                        const newProjects = [...projectsRow1];
-                                                        newProjects[index].color = e.target.value;
-                                                        setProjectsRow1(newProjects);
+                                                        const newProjects = [...projects];
+                                                        newProjects[index] = { ...newProjects[index], color: e.target.value };
+                                                        setProjects(newProjects);
                                                     }}
                                                     className="w-10 h-8 rounded cursor-pointer"
                                                 />
@@ -491,101 +500,9 @@ export const siteConfig = {
                                                     type="text"
                                                     value={project.color}
                                                     onChange={(e) => {
-                                                        const newProjects = [...projectsRow1];
-                                                        newProjects[index].color = e.target.value;
-                                                        setProjectsRow1(newProjects);
-                                                    }}
-                                                    className="flex-1 bg-[var(--cyber-darker)] border border-gray-700 rounded px-3 py-2 text-white text-sm focus:border-[var(--cyber-primary)] focus:outline-none"
-                                                />
-                                            </div>
-                                        </div>
-                                    ))}
-                                </div>
-                            </div>
-
-                            {/* Row 2 */}
-                            <div>
-                                <div className="flex items-center justify-between mb-4">
-                                    <h2 className="text-xl font-bold text-[var(--cyber-secondary)] font-mono">
-                                        {'>'} Projects Row 2 (← Left)
-                                    </h2>
-                                    <button
-                                        onClick={() => setProjectsRow2([...projectsRow2, {
-                                            id: Date.now(),
-                                            title: 'New Project',
-                                            description: 'Project description',
-                                            tech: ['React'],
-                                            color: '#a855f7'
-                                        }])}
-                                        className="px-4 py-2 bg-[var(--cyber-secondary)] text-black rounded-lg font-mono text-sm hover:opacity-90 transition-opacity"
-                                    >
-                                        + Add Project
-                                    </button>
-                                </div>
-
-                                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-                                    {projectsRow2.map((project, index) => (
-                                        <div key={project.id} className="bg-[var(--cyber-dark)] rounded-lg p-4 border border-gray-700">
-                                            <div className="flex items-center justify-between mb-3">
-                                                <div className="w-4 h-4 rounded" style={{ background: project.color }}></div>
-                                                <button
-                                                    onClick={() => setProjectsRow2(projectsRow2.filter((_, i) => i !== index))}
-                                                    className="text-red-400 hover:text-red-300 text-sm"
-                                                >
-                                                    ✕ Remove
-                                                </button>
-                                            </div>
-                                            <input
-                                                type="text"
-                                                value={project.title}
-                                                onChange={(e) => {
-                                                    const newProjects = [...projectsRow2];
-                                                    newProjects[index].title = e.target.value;
-                                                    setProjectsRow2(newProjects);
-                                                }}
-                                                placeholder="Project title"
-                                                className="w-full bg-[var(--cyber-darker)] border border-gray-700 rounded px-3 py-2 text-white text-sm mb-2 focus:border-[var(--cyber-primary)] focus:outline-none"
-                                            />
-                                            <input
-                                                type="text"
-                                                value={project.description}
-                                                onChange={(e) => {
-                                                    const newProjects = [...projectsRow2];
-                                                    newProjects[index].description = e.target.value;
-                                                    setProjectsRow2(newProjects);
-                                                }}
-                                                placeholder="Description"
-                                                className="w-full bg-[var(--cyber-darker)] border border-gray-700 rounded px-3 py-2 text-white text-sm mb-2 focus:border-[var(--cyber-primary)] focus:outline-none"
-                                            />
-                                            <input
-                                                type="text"
-                                                value={project.tech.join(', ')}
-                                                onChange={(e) => {
-                                                    const newProjects = [...projectsRow2];
-                                                    newProjects[index].tech = e.target.value.split(',').map(t => t.trim());
-                                                    setProjectsRow2(newProjects);
-                                                }}
-                                                placeholder="Tech (comma separated)"
-                                                className="w-full bg-[var(--cyber-darker)] border border-gray-700 rounded px-3 py-2 text-white text-sm mb-2 focus:border-[var(--cyber-primary)] focus:outline-none"
-                                            />
-                                            <div className="flex items-center gap-2">
-                                                <input
-                                                    type="color"
-                                                    value={project.color}
-                                                    onChange={(e) => {
-                                                        const newProjects = [...projectsRow2];
-                                                        newProjects[index].color = e.target.value;
-                                                        setProjectsRow2(newProjects);
-                                                    }}
-                                                    className="w-10 h-8 rounded cursor-pointer"
-                                                />
-                                                <input
-                                                    type="text"
-                                                    value={project.color}
-                                                    onChange={(e) => {
-                                                        const newProjects = [...projectsRow2];
-                                                        newProjects[index].color = e.target.value;
-                                                        setProjectsRow2(newProjects);
+                                                        const newProjects = [...projects];
+                                                        newProjects[index] = { ...newProjects[index], color: e.target.value };
+                                                        setProjects(newProjects);
                                                     }}
                                                     className="flex-1 bg-[var(--cyber-darker)] border border-gray-700 rounded px-3 py-2 text-white text-sm focus:border-[var(--cyber-primary)] focus:outline-none"
                                                 />

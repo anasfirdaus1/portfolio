@@ -2,41 +2,52 @@
 
 import { motion } from 'framer-motion';
 import { siteConfig } from '@/data/siteConfig';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 
-const skills = [
-  { name: 'Python', icon: '🐍', color: '#3776ab' },
-  { name: 'CSS', icon: '🎨', color: '#1572b6' },
-  { name: 'HTML', icon: '📄', color: '#e34f26' },
-  { name: 'PHP', icon: '🐘', color: '#777bb4' },
-  { name: 'React', icon: '⚛️', color: '#61dafb' },
-  { name: 'JavaScript', icon: '⚡', color: '#f7df1e' },
+// Pre-computed particle positions to avoid hydration mismatch from Math.random()
+const particles = [
+  { w: 3.5, h: 3.8, x: 12, y: 7, dur: 6.2, del: 0.3 },
+  { w: 2.9, h: 2.8, x: 53, y: 83, dur: 7.1, del: 1.1 },
+  { w: 5.3, h: 2.5, x: 46, y: 69, dur: 5.4, del: 0.7 },
+  { w: 5.5, h: 2.1, x: 84, y: 97, dur: 6.8, del: 1.5 },
+  { w: 2.3, h: 4.3, x: 72, y: 36, dur: 5.9, del: 0.2 },
+  { w: 4.3, h: 3.5, x: 32, y: 72, dur: 7.5, del: 1.8 },
+  { w: 3.3, h: 3.2, x: 50, y: 99, dur: 5.2, del: 0.5 },
+  { w: 4.5, h: 4.3, x: 4, y: 37, dur: 6.5, del: 1.3 },
+  { w: 3.2, h: 5.9, x: 40, y: 83, dur: 7.8, del: 0.9 },
+  { w: 4.8, h: 3.4, x: 13, y: 84, dur: 5.7, del: 1.6 },
+  { w: 3.6, h: 3.9, x: 19, y: 68, dur: 6.1, del: 0.4 },
+  { w: 4.5, h: 4.8, x: 8, y: 83, dur: 7.3, del: 1.0 },
+  { w: 4.4, h: 4.9, x: 14, y: 32, dur: 5.6, del: 0.8 },
+  { w: 4.9, h: 4.5, x: 29, y: 47, dur: 6.9, del: 1.4 },
+  { w: 4.0, h: 4.2, x: 67, y: 20, dur: 7.0, del: 0.6 },
 ];
 
 export default function HeroSection() {
   const [displayText, setDisplayText] = useState('');
-  const [isTypingComplete, setIsTypingComplete] = useState(false);
-  const fullText = 'Fullstack Developer';
+  const fullText = siteConfig.profile.title;
+  const indexRef = useRef(0);
+  const phaseRef = useRef<'typing' | 'pausing' | 'resetting'>('typing');
 
-  // Typing animation effect
+  // Typing animation effect - fixed to avoid memory leak
   useEffect(() => {
-    let index = 0;
     const timer = setInterval(() => {
-      if (index <= fullText.length) {
-        setDisplayText(fullText.slice(0, index));
-        index++;
+      if (phaseRef.current === 'pausing' || phaseRef.current === 'resetting') return;
+
+      if (indexRef.current <= fullText.length) {
+        setDisplayText(fullText.slice(0, indexRef.current));
+        indexRef.current++;
       } else {
-        setIsTypingComplete(true);
-        // Restart typing after pause
+        phaseRef.current = 'pausing';
         setTimeout(() => {
-          setIsTypingComplete(false);
-          index = 0;
+          indexRef.current = 0;
           setDisplayText('');
+          phaseRef.current = 'typing';
         }, 3000);
       }
     }, 120);
     return () => clearInterval(timer);
-  }, [isTypingComplete]);
+  }, [fullText]);
 
   return (
     <section
@@ -44,16 +55,16 @@ export default function HeroSection() {
     >
       {/* Animated Background Particles - Reduced for mobile performance */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none hidden md:block">
-        {[...Array(15)].map((_, i) => (
+        {particles.map((p, i) => (
           <motion.div
             key={i}
             className="absolute rounded-full"
             style={{
-              width: Math.random() * 4 + 2,
-              height: Math.random() * 4 + 2,
+              width: p.w,
+              height: p.h,
               background: i % 2 === 0 ? 'var(--cyber-primary)' : 'var(--cyber-secondary)',
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
+              left: `${p.x}%`,
+              top: `${p.y}%`,
               filter: 'blur(1px)',
             }}
             animate={{
@@ -61,9 +72,9 @@ export default function HeroSection() {
               opacity: [0.1, 0.4, 0.1],
             }}
             transition={{
-              duration: 5 + Math.random() * 3,
+              duration: p.dur,
               repeat: Infinity,
-              delay: Math.random() * 2,
+              delay: p.del,
               ease: "easeInOut",
             }}
           />
@@ -169,7 +180,7 @@ export default function HeroSection() {
               className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-[var(--cyber-primary)]/30 bg-[var(--cyber-primary)]/5 mb-6"
             >
               <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
-              <span className="text-sm text-gray-300 font-mono">Available for work</span>
+              <span className="text-sm text-gray-300 font-mono">{siteConfig.profile.tagline}</span>
             </motion.div>
 
             {/* Name */}
@@ -183,7 +194,7 @@ export default function HeroSection() {
               <span className="text-white">Hello, I'm</span>
               <br />
               <span className="bg-gradient-to-r from-[var(--cyber-primary)] to-[var(--cyber-secondary)] bg-clip-text text-transparent">
-                Anas Firdaus
+                {siteConfig.profile.name}
               </span>
             </motion.h1>
 
@@ -229,7 +240,7 @@ export default function HeroSection() {
             >
               <p className="text-sm text-gray-500 font-mono mb-4">{'// Tech Stack'}</p>
               <div className="flex flex-wrap gap-3">
-                {skills.map((skill, index) => (
+                {siteConfig.skills.map((skill, index) => (
                   <motion.div
                     key={skill.name}
                     initial={{ opacity: 0, scale: 0 }}
@@ -347,9 +358,9 @@ export default function HeroSection() {
 
                     {/* Name */}
                     <h3 className="text-xl font-bold text-white mb-1" style={{ fontFamily: 'Orbitron, sans-serif' }}>
-                      Anas Firdaus
+                      {siteConfig.profile.name}
                     </h3>
-                    <p className="text-[var(--cyber-primary)] text-sm font-mono mb-4">@anasfirdaus</p>
+                    <p className="text-[var(--cyber-primary)] text-sm font-mono mb-4">{siteConfig.profile.username}</p>
 
                     {/* Stats */}
                     <div className="flex gap-6 text-center">
