@@ -287,6 +287,96 @@ function ProjectDetailModal({ project, onClose }: { project: Project; onClose: (
     );
 }
 
+// Draggable Marquee wrapper for drag-to-scroll functionality
+function DraggableMarquee({ children, direction = 'left', isPaused = false }: { children: React.ReactNode, direction?: 'left' | 'right', isPaused?: boolean }) {
+    const containerRef = useRef<HTMLDivElement>(null);
+    const [isDragging, setIsDragging] = useState(false);
+    const [isMouseDown, setIsMouseDown] = useState(false);
+    const [startX, setStartX] = useState(0);
+    const [scrollLeft, setScrollLeft] = useState(0);
+
+    const onMouseDown = (e: React.MouseEvent) => {
+        if (!containerRef.current) return;
+        setIsMouseDown(true);
+        setStartX(e.pageX - containerRef.current.offsetLeft);
+        setScrollLeft(containerRef.current.scrollLeft);
+    };
+
+    const onMouseLeave = () => {
+        setIsMouseDown(false);
+        setIsDragging(false);
+    };
+
+    const onMouseUp = () => {
+        setIsMouseDown(false);
+        setTimeout(() => setIsDragging(false), 50);
+    };
+
+    const onMouseMove = (e: React.MouseEvent) => {
+        if (!isMouseDown || !containerRef.current) return;
+        e.preventDefault();
+        const x = e.pageX - containerRef.current.offsetLeft;
+        const walk = (x - startX) * 2;
+        if (Math.abs(walk) > 5) {
+            setIsDragging(true);
+        }
+        if (isDragging) {
+            containerRef.current.scrollLeft = scrollLeft - walk;
+        }
+    };
+
+    const onTouchStart = (e: React.TouchEvent) => {
+        if (!containerRef.current) return;
+        setIsMouseDown(true);
+        setStartX(e.touches[0].pageX - containerRef.current.offsetLeft);
+        setScrollLeft(containerRef.current.scrollLeft);
+    };
+
+    const onTouchEnd = () => {
+        setIsMouseDown(false);
+        setTimeout(() => setIsDragging(false), 50);
+    };
+
+    const onTouchMove = (e: React.TouchEvent) => {
+        if (!isMouseDown || !containerRef.current) return;
+        const x = e.touches[0].pageX - containerRef.current.offsetLeft;
+        const walk = (x - startX) * 2;
+        if (Math.abs(walk) > 5) {
+            setIsDragging(true);
+        }
+        if (isDragging) {
+            containerRef.current.scrollLeft = scrollLeft - walk;
+        }
+    };
+
+    const animationClass = direction === 'left' ? 'marquee-left' : 'marquee-right';
+
+    return (
+        <div
+            ref={containerRef}
+            className="w-full overflow-x-auto overflow-y-hidden cursor-grab active:cursor-grabbing scrollbar-hide"
+            style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+            onMouseDown={onMouseDown}
+            onMouseLeave={onMouseLeave}
+            onMouseUp={onMouseUp}
+            onMouseMove={onMouseMove}
+            onTouchStart={onTouchStart}
+            onTouchEnd={onTouchEnd}
+            onTouchMove={onTouchMove}
+        >
+            <div
+                className={`flex w-max ${!isDragging ? 'hover:[animation-play-state:paused]' : '[animation-play-state:paused]'}`}
+                style={{
+                    animation: isPaused ? 'none' : `${animationClass} 30s linear infinite`,
+                    pointerEvents: isDragging ? 'none' : 'auto', // cancel inner clicks while dragging
+                }}
+            >
+                {children}
+            </div>
+        </div>
+    );
+}
+
 export default function LibrarySection() {
     const ref = useRef(null);
     const isInView = useInView(ref, { once: true, margin: '-100px' });
@@ -321,8 +411,8 @@ export default function LibrarySection() {
                 >
                     {'{'} LIBRARY {'}'}
                 </h2>
-                <p className="text-gray-400 font-mono text-sm">
-                    {'// Klik project untuk melihat detail'}
+                <p className="text-gray-400 font-mono text-sm mb-2">
+                    {'// Geser untuk mempercepat, klik untuk melihat detail'}
                 </p>
             </motion.div>
 
@@ -333,12 +423,7 @@ export default function LibrarySection() {
                 transition={{ duration: 0.6, delay: 0.2 }}
                 className="mb-8"
             >
-                <div
-                    className="flex hover:[animation-play-state:paused]"
-                    style={{
-                        animation: isPaused ? 'none' : 'marquee-right 30s linear infinite',
-                    }}
-                >
+                <DraggableMarquee direction="right" isPaused={isPaused}>
                     {duplicatedRow1.map((project, index) => (
                         <ProjectCard
                             key={`row1-${project.id}-${index}`}
@@ -347,7 +432,7 @@ export default function LibrarySection() {
                             isPaused={isPaused}
                         />
                     ))}
-                </div>
+                </DraggableMarquee>
             </motion.div>
 
             {/* Second Row - Moving Left */}
@@ -356,12 +441,7 @@ export default function LibrarySection() {
                 animate={isInView ? { opacity: 1, x: 0 } : {}}
                 transition={{ duration: 0.6, delay: 0.4 }}
             >
-                <div
-                    className="flex hover:[animation-play-state:paused]"
-                    style={{
-                        animation: isPaused ? 'none' : 'marquee-left 30s linear infinite',
-                    }}
-                >
+                <DraggableMarquee direction="left" isPaused={isPaused}>
                     {duplicatedRow2.map((project, index) => (
                         <ProjectCard
                             key={`row2-${project.id}-${index}`}
@@ -370,7 +450,7 @@ export default function LibrarySection() {
                             isPaused={isPaused}
                         />
                     ))}
-                </div>
+                </DraggableMarquee>
             </motion.div>
 
             {/* Project Detail Modal */}

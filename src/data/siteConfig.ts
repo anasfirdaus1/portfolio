@@ -93,8 +93,8 @@ export const siteConfig: SiteConfig = {
             detailDescription: 'Website profesional untuk firma jasa hukum yang menyediakan informasi layanan konsultasi hukum, profil advokat, artikel hukum, dan sistem booking konsultasi online. Didesain dengan tampilan elegan dan terpercaya.',
             tech: ['Next.js', 'TypeScript', 'Tailwind CSS', 'Prisma'],
             color: '#a855f7',
-            image: 'https://images.unsplash.com/photo-1589829545856-d10d557cf95f?w=800&q=80',
-            // url: 'https://webhukum.vercel.app', // [!] Add live URL when available
+            image: '/webhukum.png',
+            url: 'https://webhukum.vercel.app/',
         },
         {
             id: 3,
@@ -103,8 +103,8 @@ export const siteConfig: SiteConfig = {
             detailDescription: 'Platform tour & travel yang menampilkan paket wisata menarik, galeri destinasi, sistem pemesanan online, dan informasi lengkap perjalanan. Dilengkapi dengan UI/UX modern dan responsif untuk pengalaman booking yang mudah.',
             tech: ['Next.js', 'React', 'Tailwind CSS', 'Supabase'],
             color: '#00ff88',
-            image: 'https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=800&q=80',
-            // url: 'https://tour-travel.vercel.app', // [!] Add live URL when available
+            image: '/tour.png',
+            url: 'https://tour1-dun.vercel.app/',
         },
         {
             id: 4,
@@ -113,8 +113,8 @@ export const siteConfig: SiteConfig = {
             detailDescription: 'Website travel umroh premium yang menampilkan paket perjalanan umroh dan haji, jadwal keberangkatan, galeri momen jamaah, dan sistem pendaftaran online. Dibangun dengan desain yang elegan dan bernuansa islami.',
             tech: ['Next.js', 'TypeScript', 'Tailwind CSS', 'Firebase'],
             color: '#ffcc00',
-            image: 'https://images.unsplash.com/photo-1591604129939-f1efa4d9f7fa?w=800&q=80',
-            // url: 'https://travel-umroh.vercel.app', // [!] Add live URL when available
+            image: '/travel-umroh.png',
+            url: 'https://travel1-livid.vercel.app/',
         },
         {
             id: 5,
@@ -123,8 +123,8 @@ export const siteConfig: SiteConfig = {
             detailDescription: 'Website katalog digital untuk UMKM jajanan pinggir jalan yang menampilkan menu lengkap, harga, lokasi penjualan, dan sistem pemesanan online. Membantu pelaku UMKM go-digital dengan tampilan menarik dan mudah dikelola.',
             tech: ['Next.js', 'React', 'Tailwind CSS', 'MongoDB'],
             color: '#ff6b6b',
-            image: 'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=800&q=80',
-            // url: 'https://umkm-jajanan.vercel.app', // [!] Add live URL when available
+            image: '/umkm.png',
+            url: 'https://umkm-rho.vercel.app/',
         },
         {
             id: 6,
@@ -133,8 +133,8 @@ export const siteConfig: SiteConfig = {
             detailDescription: 'Website resmi yayasan yang menampilkan profil organisasi, program-program sosial, laporan keuangan transparan, galeri kegiatan, dan sistem donasi online. Dibangun untuk meningkatkan kepercayaan donatur dan memperluas jangkauan sosial.',
             tech: ['Next.js', 'TypeScript', 'Prisma', 'Tailwind CSS'],
             color: '#4ecdc4',
-            image: 'https://images.unsplash.com/photo-1559027615-cd4628902d4a?w=800&q=80',
-            // url: 'https://yayasan.vercel.app', // [!] Add live URL when available
+            image: '/yayasan.png',
+            url: 'https://yayasan-nine.vercel.app/',
         },
     ],
 };
