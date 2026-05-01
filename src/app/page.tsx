@@ -4,6 +4,9 @@ import HeroSection from '@/components/HeroSection';
 import ProfileSection from '@/components/ProfileSection';
 import LibrarySection from '@/components/LibrarySection';
 import ServicesSection from '@/components/ServicesSection';
+import ShowcaseSection from '@/components/ShowcaseSection';
+import WorkflowSection from '@/components/WorkflowSection';
+import CTASection from '@/components/CTASection';
 import Footer from '@/components/Footer';
 import CursorLight from '@/components/CursorLight';
 
@@ -24,6 +27,15 @@ export default function Home() {
 
       {/* Services Section */}
       <ServicesSection />
+
+      {/* Pro & Business Showcase */}
+      <ShowcaseSection />
+
+      {/* Workflow Section */}
+      <WorkflowSection />
+
+      {/* CTA Section */}
+      <CTASection />
 
       {/* Footer */}
       <Footer />

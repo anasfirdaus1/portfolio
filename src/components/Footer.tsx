@@ -4,8 +4,6 @@ import { motion } from 'framer-motion';
 import { siteConfig } from '@/data/siteConfig';
 
 const socialLinks = [
-    { name: 'GitHub', href: `https://${siteConfig.profile.github}` },
-    { name: 'LinkedIn', href: `https://${siteConfig.profile.linkedin}` },
     { name: 'Email', href: `mailto:${siteConfig.profile.email}` },
     { name: 'WhatsApp', href: `https://wa.me/62${siteConfig.profile.whatsapp.replace(/^0/, '')}` },
 ];

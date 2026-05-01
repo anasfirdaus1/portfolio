@@ -43,7 +43,7 @@ export default function ProfileSection() {
     return (
         <section
             ref={ref}
-            className="min-h-screen flex items-center justify-center py-20 px-4 relative overflow-hidden"
+            className="min-h-screen flex flex-col items-center justify-center py-20 px-4 relative overflow-hidden"
             style={{ background: 'linear-gradient(180deg, var(--cyber-dark) 0%, var(--cyber-darker) 100%)' }}
         >
             {/* Section Title */}
@@ -51,7 +51,7 @@ export default function ProfileSection() {
                 initial={{ opacity: 0, y: -50 }}
                 animate={isInView ? { opacity: 1, y: 0 } : {}}
                 transition={{ duration: 0.6 }}
-                className="absolute top-10 left-1/2 transform -translate-x-1/2 z-10"
+                className="w-full mb-8 pt-10"
             >
                 <h2
                     className="text-3xl md:text-4xl font-bold text-center"
@@ -65,7 +65,7 @@ export default function ProfileSection() {
                 </h2>
             </motion.div>
 
-            <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-12 items-center mt-16">
+            <div className="w-full max-w-6xl mx-auto grid md:grid-cols-2 gap-12 items-center">
                 {/* Photo Card - Simple Drop Animation */}
                 <div className="flex justify-center items-center">
                     <motion.div
@@ -225,26 +225,6 @@ export default function ProfileSection() {
                             {'>'} CONNECT
                         </h3>
                         <div className="grid grid-cols-2 gap-4">
-                            <motion.a
-                                href="https://github.com/anasfirdaus000"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                whileHover={{ scale: 1.05, x: 5 }}
-                                className="flex items-center gap-3 text-gray-300 hover:text-[var(--cyber-primary)] transition-colors group p-2 rounded-lg hover:bg-[var(--cyber-primary)]/5"
-                            >
-                                <span className="text-xl">💻</span>
-                                <span className="text-sm">GitHub</span>
-                            </motion.a>
-                            <motion.a
-                                href="https://linkedin.com/in/anasfirdaus"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                whileHover={{ scale: 1.05, x: 5 }}
-                                className="flex items-center gap-3 text-gray-300 hover:text-[var(--cyber-secondary)] transition-colors group p-2 rounded-lg hover:bg-[var(--cyber-secondary)]/5"
-                            >
-                                <span className="text-xl">🔗</span>
-                                <span className="text-sm">LinkedIn</span>
-                            </motion.a>
                             <motion.a
                                 href="mailto:anasfirdaus000@gmail.com"
                                 whileHover={{ scale: 1.05, x: 5 }}
