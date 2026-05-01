@@ -1,7 +1,7 @@
 'use client';
 
 import { useRef, useState, useEffect } from 'react';
-import { motion, useScroll, useTransform, useMotionValueEvent } from 'framer-motion';
+import { motion, useScroll, useTransform, useMotionValueEvent, MotionValue } from 'framer-motion';
 import { siteConfig } from '@/data/siteConfig';
 
 export default function ShowcaseSection() {
@@ -167,7 +167,7 @@ export default function ShowcaseSection() {
 
 interface FanCardsProps {
     projects: typeof siteConfig.projects;
-    floatIndex: ReturnType<typeof useTransform>;
+    floatIndex: MotionValue<number>;
     activeIndex: number;
     isMobile: boolean;
     getCardStyle: (index: number, progress: number) => {
