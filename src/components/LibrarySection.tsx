@@ -388,9 +388,9 @@ export default function LibrarySection() {
     const row1 = siteConfig.projects.slice(0, half);
     const row2 = siteConfig.projects.slice(half);
 
-    // Duplicate for infinite scroll
-    const duplicatedRow1 = [...row1, ...row1, ...row1];
-    const duplicatedRow2 = [...row2, ...row2, ...row2];
+    // Duplicate for infinite scroll (2x is enough)
+    const duplicatedRow1 = [...row1, ...row1];
+    const duplicatedRow2 = [...row2, ...row2];
 
     return (
         <section

@@ -66,7 +66,7 @@ export default function ShowcaseSection() {
         <section
             id="showcase"
             ref={targetRef}
-            style={{ height: `${totalItems * 100}vh` }}
+            style={{ height: `${totalItems * (isMobile ? 70 : 100)}vh` }}
             className="relative"
         >
             {/* Sticky viewport — pinned until scroll exhausts the outer container */}
@@ -75,11 +75,15 @@ export default function ShowcaseSection() {
                 style={{ background: 'linear-gradient(180deg, var(--cyber-dark) 0%, #080810 50%, var(--cyber-dark) 100%)' }}
             >
                 {/* Background decorative elements */}
-                <div className="absolute inset-0 cyber-grid opacity-5 pointer-events-none"></div>
-                <div
-                    className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[900px] h-[900px] rounded-full pointer-events-none"
-                    style={{ background: 'radial-gradient(circle, rgba(0,212,255,0.04) 0%, transparent 70%)' }}
-                ></div>
+                {!isMobile && (
+                    <>
+                        <div className="absolute inset-0 cyber-grid opacity-5 pointer-events-none"></div>
+                        <div
+                            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[900px] h-[900px] rounded-full pointer-events-none"
+                            style={{ background: 'radial-gradient(circle, rgba(0,212,255,0.04) 0%, transparent 70%)' }}
+                        ></div>
+                    </>
+                )}
 
                 {/* Section Title */}
                 <motion.div

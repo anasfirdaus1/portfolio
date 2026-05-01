@@ -29,8 +29,11 @@ export default function HeroSection() {
   const indexRef = useRef(0);
   const phaseRef = useRef<'typing' | 'pausing' | 'resetting'>('typing');
 
-  // Typing animation effect - fixed to avoid memory leak
+  const [isMobile, setIsMobile] = useState(false);
+
+  // Typing animation effect
   useEffect(() => {
+    setIsMobile(window.innerWidth < 768);
     const timer = setInterval(() => {
       if (phaseRef.current === 'pausing' || phaseRef.current === 'resetting') return;
 
@@ -316,18 +319,14 @@ export default function HeroSection() {
 
                 {/* Card Background */}
                 <div className="relative h-full bg-gradient-to-br from-[var(--cyber-primary)]/10 to-[var(--cyber-secondary)]/10 rounded-2xl border border-[var(--cyber-primary)]/40 backdrop-blur-sm overflow-hidden">
-                  {/* Animated gradient overlay */}
-                  <motion.div
-                    className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent"
-                    animate={{
-                      x: ['-200%', '200%'],
-                    }}
-                    transition={{
-                      duration: 3,
-                      repeat: Infinity,
-                      repeatDelay: 2,
-                    }}
-                  />
+                  {/* Animated gradient overlay - desktop only */}
+                  {!isMobile && (
+                    <motion.div
+                      className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent"
+                      animate={{ x: ['-200%', '200%'] }}
+                      transition={{ duration: 3, repeat: Infinity, repeatDelay: 2 }}
+                    />
+                  )}
 
                   {/* Grid Pattern */}
                   <div className="absolute inset-0 cyber-grid opacity-20"></div>
@@ -365,33 +364,21 @@ export default function HeroSection() {
                     {/* Stats */}
                     <div className="flex gap-6 text-center">
                       <div>
-                        <motion.p
-                          className="text-xl font-bold text-white"
-                          animate={{ scale: [1, 1.1, 1] }}
-                          transition={{ duration: 2, repeat: Infinity }}
-                        >
+                        <p className="text-xl font-bold text-white">
                           {siteConfig.profile.experience}
-                        </motion.p>
+                        </p>
                         <p className="text-xs text-gray-400">Experience</p>
                       </div>
                       <div>
-                        <motion.p
-                          className="text-xl font-bold text-white"
-                          animate={{ scale: [1, 1.1, 1] }}
-                          transition={{ duration: 2, repeat: Infinity, delay: 0.3 }}
-                        >
+                        <p className="text-xl font-bold text-white">
                           {siteConfig.profile.projectCount}
-                        </motion.p>
+                        </p>
                         <p className="text-xs text-gray-400">Projects</p>
                       </div>
                       <div>
-                        <motion.p
-                          className="text-xl font-bold text-white"
-                          animate={{ scale: [1, 1.1, 1] }}
-                          transition={{ duration: 2, repeat: Infinity, delay: 0.6 }}
-                        >
+                        <p className="text-xl font-bold text-white">
                           {siteConfig.profile.clientCount}
-                        </motion.p>
+                        </p>
                         <p className="text-xs text-gray-400">Clients</p>
                       </div>
                     </div>
@@ -405,28 +392,32 @@ export default function HeroSection() {
                 <div className="absolute -bottom-2 -right-2 w-6 h-6 border-b-2 border-r-2 border-[var(--cyber-primary)]"></div>
               </motion.div>
 
-              {/* Orbiting Elements */}
-              <motion.div
-                animate={{ rotate: 360 }}
-                transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
-                className="absolute inset-[-30px] pointer-events-none"
-              >
-                <div className="absolute top-0 left-1/2 w-3 h-3 bg-[var(--cyber-primary)] rounded-full shadow-lg shadow-[var(--cyber-primary)]/50"></div>
-              </motion.div>
-              <motion.div
-                animate={{ rotate: -360 }}
-                transition={{ duration: 12, repeat: Infinity, ease: "linear" }}
-                className="absolute inset-[-50px] pointer-events-none"
-              >
-                <div className="absolute top-1/2 right-0 w-2 h-2 bg-[var(--cyber-secondary)] rounded-full shadow-lg shadow-[var(--cyber-secondary)]/50"></div>
-              </motion.div>
-              <motion.div
-                animate={{ rotate: 360 }}
-                transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-                className="absolute inset-[-70px] pointer-events-none"
-              >
-                <div className="absolute bottom-0 left-1/4 w-2 h-2 bg-[var(--cyber-accent)] rounded-full shadow-lg shadow-[var(--cyber-accent)]/50"></div>
-              </motion.div>
+              {/* Orbiting Elements - Desktop only */}
+              {!isMobile && (
+                <>
+                  <motion.div
+                    animate={{ rotate: 360 }}
+                    transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
+                    className="absolute inset-[-30px] pointer-events-none"
+                  >
+                    <div className="absolute top-0 left-1/2 w-3 h-3 bg-[var(--cyber-primary)] rounded-full shadow-lg shadow-[var(--cyber-primary)]/50"></div>
+                  </motion.div>
+                  <motion.div
+                    animate={{ rotate: -360 }}
+                    transition={{ duration: 12, repeat: Infinity, ease: "linear" }}
+                    className="absolute inset-[-50px] pointer-events-none"
+                  >
+                    <div className="absolute top-1/2 right-0 w-2 h-2 bg-[var(--cyber-secondary)] rounded-full shadow-lg shadow-[var(--cyber-secondary)]/50"></div>
+                  </motion.div>
+                  <motion.div
+                    animate={{ rotate: 360 }}
+                    transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+                    className="absolute inset-[-70px] pointer-events-none"
+                  >
+                    <div className="absolute bottom-0 left-1/4 w-2 h-2 bg-[var(--cyber-accent)] rounded-full shadow-lg shadow-[var(--cyber-accent)]/50"></div>
+                  </motion.div>
+                </>
+              )}
             </div>
           </motion.div>
         </div>

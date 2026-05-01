@@ -19,17 +19,9 @@ export default function CTASection() {
             {/* Background effects */}
             <div className="absolute inset-0 cyber-grid opacity-20 pointer-events-none"></div>
             
-            {/* Glowing Orbs */}
-            <motion.div 
-                className="absolute top-1/2 left-1/4 w-64 h-64 bg-[var(--cyber-primary)]/10 rounded-full blur-3xl"
-                animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.6, 0.3] }}
-                transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
-            />
-            <motion.div 
-                className="absolute top-1/2 right-1/4 w-64 h-64 bg-[var(--cyber-secondary)]/10 rounded-full blur-3xl"
-                animate={{ scale: [1.2, 1, 1.2], opacity: [0.6, 0.3, 0.6] }}
-                transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
-            />
+            {/* Glowing Orbs - static to avoid GPU drain */}
+            <div className="absolute top-1/2 left-1/4 w-64 h-64 bg-[var(--cyber-primary)]/10 rounded-full blur-3xl opacity-40 pointer-events-none" />
+            <div className="absolute top-1/2 right-1/4 w-64 h-64 bg-[var(--cyber-secondary)]/10 rounded-full blur-3xl opacity-40 pointer-events-none" />
 
             <motion.div
                 initial={{ opacity: 0, scale: 0.9, y: 50 }}

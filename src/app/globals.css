@@ -255,18 +255,27 @@ body {
 
 .marquee-left {
   animation: marquee-left 30s linear infinite;
+  will-change: transform;
+  transform: translateZ(0);
 }
 
 .marquee-right {
   animation: marquee-right 30s linear infinite;
+  will-change: transform;
+  transform: translateZ(0);
 }
 
 /* Card Hover Effect */
 .cyber-card {
   background: linear-gradient(135deg, rgba(0, 255, 136, 0.05) 0%, rgba(0, 212, 255, 0.05) 100%);
-  backdrop-filter: blur(10px);
   border: 1px solid rgba(0, 255, 136, 0.2);
-  transition: all 0.3s ease;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+@media (min-width: 769px) {
+  .cyber-card {
+    backdrop-filter: blur(10px);
+  }
 }
 
 .cyber-card:hover {
@@ -297,11 +306,25 @@ section {
   position: relative;
 }
 
-/* Responsive */
+/* GPU-accelerate sections for smoother scroll */
 @media (max-width: 768px) {
+  section {
+    content-visibility: auto;
+    contain-intrinsic-size: auto 100vh;
+  }
+
+  .cyber-grid {
+    opacity: 0.015 !important;
+  }
+
   .typing-effect {
     animation: none;
     border-right: none;
     white-space: normal;
+  }
+
+  /* Reduce blur radius on mobile */
+  .blur-2xl, .blur-3xl, .blur-xl {
+    filter: blur(12px) !important;
   }
 }

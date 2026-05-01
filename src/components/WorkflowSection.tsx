@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { motion, useInView } from 'framer-motion';
 
 const workflows = [
@@ -15,6 +15,11 @@ const workflows = [
 export default function WorkflowSection() {
     const ref = useRef(null);
     const isInView = useInView(ref, { once: true, margin: '-100px' });
+    const [isMobile, setIsMobile] = useState(false);
+
+    useEffect(() => {
+        setIsMobile(window.innerWidth < 768);
+    }, []);
 
     return (
         <section
@@ -79,10 +84,9 @@ export default function WorkflowSection() {
                         return (
                             <motion.div
                                 key={step.id}
-                                initial={{ opacity: 0, x: isEven ? -100 : 100, rotateY: isEven ? -45 : 45 }}
-                                animate={isInView ? { opacity: 1, x: 0, rotateY: 0 } : {}}
-                                transition={{ duration: 0.8, delay: index * 0.2, type: 'spring', bounce: 0.4 }}
-                                style={{ transformStyle: 'preserve-3d' }}
+                                initial={{ opacity: 0, x: isMobile ? 0 : (isEven ? -100 : 100) }}
+                                animate={isInView ? { opacity: 1, x: 0 } : {}}
+                                transition={{ duration: 0.6, delay: index * 0.15 }}
                                 className={`flex flex-col md:flex-row items-center gap-6 md:gap-16 ${isEven ? 'md:flex-row-reverse' : ''}`}
                             >
                                 {/* Empty space for desktop alignment */}
@@ -101,13 +105,15 @@ export default function WorkflowSection() {
                                         }}
                                     >
                                         <span className="relative z-10">{step.icon}</span>
-                                        {/* Pulse effect */}
-                                        <motion.div
-                                            className="absolute inset-0 rounded-full"
-                                            style={{ backgroundColor: step.color }}
-                                            animate={{ scale: [1, 1.5], opacity: [0.3, 0] }}
-                                            transition={{ duration: 2, repeat: Infinity, delay: index * 0.3 }}
-                                        />
+                                        {/* Pulse effect - desktop only */}
+                                        {!isMobile && (
+                                            <motion.div
+                                                className="absolute inset-0 rounded-full"
+                                                style={{ backgroundColor: step.color }}
+                                                animate={{ scale: [1, 1.5], opacity: [0.3, 0] }}
+                                                transition={{ duration: 2, repeat: Infinity, delay: index * 0.3 }}
+                                            />
+                                        )}
                                     </motion.div>
                                     
                                     {/* Desktop Connector Branch */}
@@ -122,13 +128,10 @@ export default function WorkflowSection() {
                                 </div>
 
                                 {/* Content Card */}
-                                <div className="w-full md:w-1/2 flex perspective-1000">
-                                    <motion.div
-                                        whileHover={{ scale: 1.05, translateZ: 50, rotateX: 5, rotateY: isEven ? 5 : -5 }}
-                                        className="w-full p-6 rounded-xl cyber-card relative group border"
-                                        style={{
-                                            borderColor: `${step.color}40`,
-                                        }}
+                                <div className="w-full md:w-1/2 flex">
+                                    <div
+                                        className="w-full p-6 rounded-xl cyber-card relative group border transition-all hover:scale-105"
+                                        style={{ borderColor: `${step.color}40` }}
                                     >
                                         {/* Card Inner Glow */}
                                         <div 
@@ -159,7 +162,7 @@ export default function WorkflowSection() {
                                         {/* Corner Accents */}
                                         <div className="absolute top-0 left-0 w-3 h-3 border-t-2 border-l-2 rounded-tl-lg opacity-50" style={{ borderColor: step.color }}></div>
                                         <div className="absolute bottom-0 right-0 w-3 h-3 border-b-2 border-r-2 rounded-br-lg opacity-50" style={{ borderColor: step.color }}></div>
-                                    </motion.div>
+                                    </div>
                                 </div>
                             </motion.div>
                         );
